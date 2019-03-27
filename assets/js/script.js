@@ -6,6 +6,9 @@ window.onload = function () {
   var food;
   var ctx;
 
+  var img = new Image();   // Crée un nouvel élément Image
+  img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
+
   var canvasWidth = 700;
   var canvasHeight = 500;
   var canvasDiv = document.getElementById('canvasDiv');
@@ -36,10 +39,7 @@ window.onload = function () {
   }
 
   var fruit = function(x, y) {
-    ctx.fillStyle = 'yellow';
-    ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.fillStyle = 'red';
-    ctx.fillRect(x*snakeSize+1, y*snakeSize+1, snakeSize-2, snakeSize-2);
+    ctx.drawImage(img, x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
 
   var scoreText = function() {
