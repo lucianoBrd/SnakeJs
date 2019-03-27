@@ -5,6 +5,7 @@ window.onload = function () {
   var snake;
   var food;
   var ctx;
+  var walls = [[5,4], [10,20], [15,12]]
 
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
@@ -28,7 +29,13 @@ window.onload = function () {
 
 
 
-
+  var createWalls = function(){
+    
+    for(var i = 0; i<walls.length; i++){
+      ctx.fillStyle = 'red';
+      ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
+    }
+  }
 
 
   var bodySnake = function(x, y) { //
@@ -102,7 +109,7 @@ window.onload = function () {
     for(var i = 0; i < snake.length; i++) {
       bodySnake(snake[i].x, snake[i].y);
     }
-
+    createWalls();
     fruit(food.x, food.y);
     scoreText();
   }
@@ -122,12 +129,27 @@ window.onload = function () {
         food.y = Math.floor((Math.random() * (canvasHeight/100+snakeSize)) );
       }
     }
+
+    for(var i =0; i<walls.length; i++){
+      if(walls[i][0]===food.x && walls[i][1]===food.y){
+        food.x = Math.floor((Math.random() * (canvasWidth/100+snakeSize)) );
+        food.y = Math.floor((Math.random() * (canvasHeight/100+snakeSize)) );
+      }
+    }
   }
 
   var checkCollision = function(x, y, array) {
     for(var i = 0; i < array.length; i++) {
-      if(array[i].x === x && array[i].y === y)
-      return true;
+      if(array[i].x === x && array[i].y === y){
+        return true;
+      }
+    }
+    for(var i = 0; i< walls.length; i++){
+      console.log(x);
+      if(walls[i][0] === x && walls[i][1]=== y){
+        console.log("zob");
+        return true;
+      }
     }
     return false;
   }
