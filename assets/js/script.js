@@ -1,7 +1,7 @@
 window.onload = function () {
   var direction = 'down';
   var score = 0;
-  var snakeSize = 10;
+  var snakeSize = 20;
   var snake;
   var food;
   var ctx;
@@ -28,10 +28,10 @@ window.onload = function () {
 
 
 
-  var bodySnake = function(x, y) {
+  var bodySnake = function(x, y) { //
     ctx.fillStyle = 'gray';
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = 'gray';
     ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
 
