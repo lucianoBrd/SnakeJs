@@ -5,16 +5,16 @@ btn.addEventListener("click", function(){ drawModule.init();});
 
 	document.onkeydown = function(event) {
 
-        keyCode = window.event.keyCode; 
+        keyCode = window.event.keyCode;
         keyCode = event.keyCode;
 
         switch(keyCode) {
-        
-        case 37: 
+
+        case 37:
           if (direction != 'right') {
             direction = 'left';
           }
-          console.log('left'); 
+          console.log('left');
           break;
 
         case 39:
