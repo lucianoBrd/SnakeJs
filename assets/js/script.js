@@ -5,7 +5,7 @@ window.onload = function () {
   var snake;
   var food;
   var ctx;
-  var walls = [[5,4], [10,20], [15,12]]
+  var walls;
 
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
@@ -30,7 +30,7 @@ window.onload = function () {
 
 
   var createWalls = function(){
-    
+
     for(var i = 0; i<walls.length; i++){
       ctx.fillStyle = 'red';
       ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
