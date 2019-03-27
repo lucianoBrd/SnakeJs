@@ -1,10 +1,15 @@
 window.onload = function () {
+  var path = './assets/niv/';
+  var extention = '.json';
+  var niv;
   var direction = 'down';
   var score = 0;
   var snakeSize = 20;
   var snake;
   var food;
   var ctx;
+
+  var delay;
   var walls = [];
 
   var img = new Image();   // Crée un nouvel élément Image
@@ -15,19 +20,53 @@ window.onload = function () {
   var canvasDiv = document.getElementById('canvasDiv');
   var btn = document.getElementById("startButton");
   btn.addEventListener("click", function(){
+   // start();
+    //loadNiv(1);
+  });
+
+  document.getElementById("niv1").addEventListener("click", function(){
+    start();
+    loadNiv(1);
+  });
+
+  document.getElementById("niv2").addEventListener("click", function(){
+    start();
+    loadNiv(2);
+  });
+
+  document.getElementById("niv3").addEventListener("click", function(){
+    start();
+    loadNiv(3);
+  });
+
+  var start = function(){
     canvas = document.createElement('canvas');
     canvas.setAttribute('width', canvasWidth);
     canvas.setAttribute('height', canvasHeight);
     canvas.setAttribute('id', 'canvas');
     canvasDiv.appendChild(canvas);
     if(typeof G_vmlCanvasManager != 'undefined') {
-  	canvas = G_vmlCanvasManager.initElement(canvas);
+  	   canvas = G_vmlCanvasManager.initElement(canvas);
+    }
+    ctx = canvas.getContext('2d');
   }
-  ctx = canvas.getContext('2d');
-  init();
-  });
 
+  function loadNiv(nbNiv){
+    fetch(path+nbNiv+extention).then(function(response) {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw ("Error " + response.status);
+        }
+    }).then(function(data) {
+        niv = data;
+        delay = niv.delay;
+        walls = niv.walls;
+        init();
 
+    }).catch(function(err) {
+    });
+  }
 
   var createWalls = function(){
 
@@ -90,6 +129,10 @@ window.onload = function () {
       ctx.clearRect(0,0,canvasWidth,canvasHeight);
       gameloop = clearInterval(gameloop);
       score = 0;
+      setTimeout(function(){
+        
+        canvas.style.display = "none";
+      }, 500);
       return;
     }
 
@@ -154,11 +197,12 @@ window.onload = function () {
     return false;
   }
 
+
   var init = function(){
     direction = 'down';
     drawSnake();
     createFood();
-    gameloop = setInterval(paint, 80);
+    gameloop = setInterval(paint, delay);
   }
 
   document.onkeydown = function(event) {

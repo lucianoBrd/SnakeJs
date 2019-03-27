@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <script src="./assets/js/script.js"></script>
     <link rel="stylesheet" type="text/css" href="./assets/css/default.css">
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
@@ -9,24 +10,24 @@
     <script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id ="main">
           <div id="canvasDiv">
-              
           </div>
           <button type="button" class="btn btn-primary btn-lg btn-block" id="startButton">Initier la folie</button>
           
-          <div class="container" id="levels">
-              <button type="button" class="btn btn-primary btn-lg btn-block" id="niv1">Niveau 1</button>
-              <button type="button" class="btn btn-primary btn-lg btn-block" id="niv2">Niveau 2</button>
-              <button type="button" class="btn btn-primary btn-lg btn-block" id="niv3">Niveau 3</button>    
-          </div>
           
           <div class="container" id="rules">
               <blockquote class="blockquote">
-                  <h2>Les regles</h2>
+                  <h2>Les règles</h2>
                   <p class="mb-0">Mangez tous les fruits avant que l'horrible monstre ne vous rattrape.</p>
                   <footer class="blockquote-footer">Une légende vivante <cite title="Source Title">El Baron Rouge</cite></footer>
                 </blockquote>
+          </div>
+
+          <div class="container center-block" id="levels">
+              <button type="button" class="btn btn-primary btn-lg btn-block" id="niv1">Niveau 1</button>
+              <button type="button" class="btn btn-primary btn-lg btn-block" id="niv2">Niveau 2</button>
+              <button type="button" class="btn btn-primary btn-lg btn-block" id="niv3">Niveau 3</button>    
           </div>
   </div>
 
