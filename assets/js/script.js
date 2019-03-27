@@ -5,7 +5,7 @@ window.onload = function () {
   var snake;
   var food;
   var ctx;
-  var walls;
+  var walls = [];
 
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
@@ -145,9 +145,9 @@ window.onload = function () {
       }
     }
     for(var i = 0; i< walls.length; i++){
-      console.log(x);
+      
       if(walls[i][0] === x && walls[i][1]=== y){
-        console.log("zob");
+        
         return true;
       }
     }
