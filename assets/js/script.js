@@ -44,8 +44,8 @@ window.onload = function () {
 
   var scoreText = function() {
     var score_text = "Score: " + score;
-    ctx.fillStyle = 'blue';
-    ctx.fillText(score_text, 145, canvasHeight-5);
+    ctx.fillStyle = 'black';
+    ctx.fillText(score_text, canvasWidth/2, canvasHeight-5);
   }
 
   var drawSnake = function() {
