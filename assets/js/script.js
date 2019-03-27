@@ -32,9 +32,9 @@ window.onload = function () {
 
 
   var bodySnake = function(x, y) { //
-    ctx.fillStyle = 'gray';
+    ctx.fillStyle = 'lightgray';
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = 'gray';
+    ctx.strokeStyle = 'lightgray';
     ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
 
@@ -44,7 +44,7 @@ window.onload = function () {
 
   var scoreText = function() {
     var score_text = "Score: " + score;
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'lightgray';
     ctx.fillText(score_text, canvasWidth/2, canvasHeight-5);
   }
 
@@ -57,7 +57,7 @@ window.onload = function () {
   }
 
   var paint = function(){
-    ctx.fillStyle = 'lightgrey';
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.strokeStyle = 'black';
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
@@ -109,8 +109,8 @@ window.onload = function () {
 
   var createFood = function() {
     food = {
-      x: Math.floor((Math.random() * (canvasWidth/100+snakeSize)) + 1),
-      y: Math.floor((Math.random() * (canvasHeight/100+snakeSize)) + 1)
+      x: Math.floor((Math.random() * (canvasWidth/100+snakeSize)) ),
+      y: Math.floor((Math.random() * (canvasHeight/100+snakeSize)) )
     }
 
     for (var i=0; i>snake.length; i++) {
@@ -118,8 +118,8 @@ window.onload = function () {
       var snakeY = snake[i].y;
 
       if (food.x===snakeX && food.y === snakeY || food.y === snakeY && food.x===snakeX) {
-        food.x = Math.floor((Math.random() * (canvasWidth/100)) + 1);
-        food.y = Math.floor((Math.random() * (canvasHeight/100)) + 1);
+        food.x = Math.floor((Math.random() * (canvasWidth/100+snakeSize)) );
+        food.y = Math.floor((Math.random() * (canvasHeight/100+snakeSize)) );
       }
     }
   }
