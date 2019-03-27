@@ -1,11 +1,16 @@
 window.onload = function () {
+  var path = './assets/niv/';
+  var extention = '.json';
+  var niv;
   var direction = 'down';
   var score = 0;
   var snakeSize = 20;
   var snake;
   var food;
   var ctx;
-  var walls;
+
+  var delay;
+  var walls = [];
 
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
@@ -21,13 +26,29 @@ window.onload = function () {
     canvas.setAttribute('id', 'canvas');
     canvasDiv.appendChild(canvas);
     if(typeof G_vmlCanvasManager != 'undefined') {
-  	canvas = G_vmlCanvasManager.initElement(canvas);
-  }
-  ctx = canvas.getContext('2d');
-  init();
+  	   canvas = G_vmlCanvasManager.initElement(canvas);
+    }
+    ctx = canvas.getContext('2d');
+    loadNiv(3);
+
   });
 
+  function loadNiv(nbNiv){
+    fetch(path+nbNiv+extention).then(function(response) {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw ("Error " + response.status);
+        }
+    }).then(function(data) {
+        niv = data;
+        delay = niv.delay;
+        walls = niv.walls;
+        init();
 
+    }).catch(function(err) {
+    });
+  }
 
   var createWalls = function(){
 
@@ -147,7 +168,6 @@ window.onload = function () {
     for(var i = 0; i< walls.length; i++){
       console.log(x);
       if(walls[i][0] === x && walls[i][1]=== y){
-        console.log("zob");
         return true;
       }
     }
@@ -158,7 +178,7 @@ window.onload = function () {
     direction = 'down';
     drawSnake();
     createFood();
-    gameloop = setInterval(paint, 80);
+    gameloop = setInterval(paint, delay);
   }
 
   document.onkeydown = function(event) {
