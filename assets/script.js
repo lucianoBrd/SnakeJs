@@ -2,6 +2,7 @@ window.onload = function () {
   var canvasWidth = 700;
   var canvasHeight = 500;
   var canvasDiv = document.getElementById('canvasDiv');
+  
   document.getElementById("startButton").addEventListener("click", function(){
     canvas = document.createElement('canvas');
     canvas.setAttribute('width', canvasWidth);
