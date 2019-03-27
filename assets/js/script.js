@@ -29,13 +29,13 @@ window.onload = function () {
 
 
   var bodySnake = function(x, y) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'gray';
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = 'darkgreen';
+    ctx.strokeStyle = 'black';
     ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
 
-  var pizza = function(x, y) {
+  var fruit = function(x, y) {
     ctx.fillStyle = 'yellow';
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
     ctx.fillStyle = 'red';
@@ -103,7 +103,7 @@ window.onload = function () {
       bodySnake(snake[i].x, snake[i].y);
     }
 
-    pizza(food.x, food.y);
+    fruit(food.x, food.y);
     scoreText();
   }
 
