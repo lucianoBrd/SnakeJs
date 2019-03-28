@@ -1,6 +1,6 @@
 window.onload = function () {
   var path = './assets/niv/';
-  var pathScore = './assets/scores'
+  var pathScore = './assets/scores/score'
   var extension = '.json';
   var niv;
   var direction = 'down';
@@ -20,7 +20,21 @@ window.onload = function () {
   var canvasWidth = 1920;
   var canvasHeight = 900;
   var canvasDiv = document.getElementById('canvasDiv');
+  var mainContainer = document.getElementById("main");
+  var modal = document.getElementById("modalbody");
   var btn = document.getElementById("startButton");
+
+  loadScore(); //chargement initial des scores
+  for(var i =0; i<scores.length; i++){ //premier remplissage du modal
+      
+    txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
+    
+    modal.appendChild(txt);
+    modal.appendChild(document.createElement('hr'));
+    
+  }
+
+
   btn.addEventListener("click", function(){
    // start();
     //loadNiv(1);
@@ -64,11 +78,34 @@ window.onload = function () {
       }
   }).then(function(data) {
       scores = data.score;
-      init();
+      
 
   }).catch(function(err) {
   });
   }
+
+  var scoreButton = document.getElementById("scoreButton");
+
+  scoreButton.addEventListener("click", function(){
+    loadScore();
+    for (let i = 0; i < modal.children.length; i++) {
+      remove(modal.children[i]);
+    }
+    
+    var txt;
+    for(var i =0; i<scores.length; i++){
+      
+      txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
+      
+      modal.appendChild(txt);
+      modal.appendChild(document.createElement('hr'));
+      
+      
+    }
+    
+    
+    
+  });
 
   function loadNiv(nbNiv){
     fetch(path+nbNiv+extension).then(function(response) {
