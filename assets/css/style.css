@@ -1,13 +1,15 @@
 @import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
 
 body {
-  background-color:orange!important;
+ /* background-color:rgba(182, 0, 0, 0.308)!important;*/
+ background-image : url("../img/back.jpg")!important;
+ background-size: cover;
 }
 
 #exit {
   height:30px;
   width:30px;
-  background:#006680;
+  background:#220000e7;
   border: 1px solid black;
   border-radius:50px;
   position:Absolute;
@@ -27,10 +29,10 @@ body {
   background:transparent;
   border-radius:50px;
   position:absolute;
-  top:5px;
-  left:5px;
+  top:7px;
+  left:7px;
   
-  border:3px solid orange;
+  border:3px solid red;
   border-top-color:transparent;
   
 }
@@ -40,10 +42,10 @@ body {
   display:block;
   height:10px;
   width:3px;
-  background:orange;
+  background:red;
   z-index:70;
   position:Absolute;
-  right:13px;
+  right:12px;
   top:6px;
   
 }
@@ -87,30 +89,10 @@ body {
   
 }
 
-#niv1 {
-  
-  position:relative;
-  bottom:360px;
-  right:300px;
-  height:50px;
-  width:600px;
-  background:#006680;
-  text-align:center;
-  font-size:30px;
- background-size: 1px 300%;
- -webkit-transition:0.5s;
-  transition:0.5s;
-  color:orange;
-  font-family:shadows into light;
-  
-  cursor:pointer;
-  margin-bottom : 3%;
-  
-  
-}
+
 
 #niv1:hover {
-  background:#7A0000;
+  background:rgb(189, 0, 0);
   color:white;
 -webkit-transform:rotate(-1deg);
   transform:rotate(-2deg);
@@ -119,7 +101,7 @@ body {
 }
 
 #niv2:hover {
-  background:#7A0000;
+  background:rgb(189, 0, 0);
   color:white;
    
   -webkit-transform:rotate(-2deg);
@@ -129,7 +111,7 @@ body {
 }
 
 #credits:hover {
-  background:#7A0000;
+  background:rgb(189, 0, 0);
   color:white;
   -webkit-transform:rotate(-2deg);
   transform:rotate(-2deg);
@@ -137,7 +119,7 @@ body {
 }
 
 #niv3:hover {
-  background:#7A0000;
+  background:rgb(189, 0, 0);
   color:white;
   -webkit-transform:rotate(-2deg);
   transform:rotate(-2deg);
@@ -146,21 +128,21 @@ body {
 
 #left {
   height:100px;
-    width:600px;
-  background:orange;
+  width:600px;
+  background:rgba(182, 0, 0, 0);
   position:absolute;
   z-index:6;
   -webkit-transform:rotate(45deg);
   transform:rotate(45deg);
-  top:-175px;
-  right:-104px;
+  top:-229px;
+  right:-56px;
   border-top:1px solid white;
   
 }
 #right {
   height:100px;
   width:600px;
-  background:orange;
+  background:rgba(182, 0, 0, 0);
   position:absolute;
   top:-229px;
   -webkit-transform:rotate(-45deg);
@@ -182,22 +164,50 @@ body {
   
 }
 
+#niv1 {
+  
+  position:relative;
+  bottom:360px;
+  right:300px;
+  height:50px;
+  width:600px;
+  background:#ffd3d3;
+  text-align:center;
+  font-size:30px;
+ background-size: 1px 300%;
+ -webkit-transition:0.5s;
+  transition:0.5s;
+  color:#000000;
+  font-family:shadows into light;
+  border-color : rgb(255, 255, 255);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  cursor:pointer;
+  margin-bottom : 3%;
+  
+  
+}
+
 #niv2 {
   height:50px;
   width:500px;
-  background:#006680;
+  background:#c25858;
   position:relative;
   bottom:350px;
   right:240px;
   text-align:center;
   font-size:30px;
   font-family:shadows into light;
-  color:orange;
+  color:#000000;
    -webkit-transition:0.5s;
   transition:0.5s;
   cursor:pointer;
   margin-bottom : 3%;
-   
+  border-color : rgb(255, 255, 255);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
   
 }
 #niv2 p {
@@ -211,18 +221,22 @@ body {
   
   height:50px;
   width:400px;
-  background:#006680;
+  background:rgb(129, 24, 24);
   position:relative;
   bottom:340px;
   right:200px;
   font-size:30px;
   text-align:center;
   font-family:shadows into light;
-  color:orange;
+  color:#000000;
    -webkit-transition:0.5s;
   transition:0.5s;
   cursor:pointer;
   margin-bottom : 3%;
+  border-color : rgb(255, 255, 255);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
 }
 
 #niv3 p {
@@ -236,17 +250,20 @@ body {
   height:50px;
   width:300px;
   position:relative;
-  background:#006680;
+  background:#d8d3d3;
   bottom:330px;
   font-size:30px;
   right:150px;
   text-align:center;
   font-family:shadows into light;
-  color:orange;
+  color:#000000;
    -webkit-transition:0.5s;
   transition:0.5s;
   cursor:pointer;
-  
+  border-color : rgb(255, 255, 255);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
 }
 
 #credits p {
