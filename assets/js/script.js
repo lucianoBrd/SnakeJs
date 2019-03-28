@@ -11,6 +11,10 @@ window.onload = function () {
   var ctx;
   var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3'];
   var game = new Audio(music[2]);
+  game.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
 
 
   var scores = [];
