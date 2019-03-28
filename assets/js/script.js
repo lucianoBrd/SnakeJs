@@ -197,7 +197,7 @@ window.onload = function () {
       setTimeout(function(){
 
         canvas.style.display = "none";
-      }, 500);
+      }, 1300);
       return;
     }
 
