@@ -9,6 +9,7 @@ window.onload = function () {
   var snake;
   var food;
   var ctx;
+  var music = ['./assets/sound/eat.mp3'];
 
   var scores = [];
   var delay;
@@ -26,18 +27,20 @@ window.onload = function () {
 
   loadScore(); //chargement initial des scores
   for(var i =0; i<scores.length; i++){ //premier remplissage du modal
-      
+
     txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
-    
+
     modal.appendChild(txt);
     modal.appendChild(document.createElement('hr'));
-    
+
   }
 
 
   btn.addEventListener("click", function(){
    // start();
     //loadNiv(1);
+    sound(0);
+
   });
 
   document.getElementById("niv1").addEventListener("click", function(){
@@ -54,6 +57,11 @@ window.onload = function () {
     start();
     loadNiv(3);
   });
+
+  var sound = function(select){
+    var audio = new Audio(music[select]);
+    audio.play();
+  }
 
   var start = function(){
     canvas = document.createElement('canvas');
@@ -78,7 +86,7 @@ window.onload = function () {
       }
   }).then(function(data) {
       scores = data.score;
-      
+
 
   }).catch(function(err) {
   });
@@ -91,20 +99,20 @@ window.onload = function () {
     for (let i = 0; i < modal.children.length; i++) {
       remove(modal.children[i]);
     }
-    
+
     var txt;
     for(var i =0; i<scores.length; i++){
-      
+
       txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
-      
+
       modal.appendChild(txt);
       modal.appendChild(document.createElement('hr'));
-      
-      
+
+
     }
-    
-    
-    
+
+
+
   });
 
   function loadNiv(nbNiv){
@@ -187,16 +195,16 @@ window.onload = function () {
       gameloop = clearInterval(gameloop);
       score = 0;
       setTimeout(function(){
-        
+
         canvas.style.display = "none";
       }, 500);
       return;
     }
 
     if(snakeX == food.x && snakeY == food.y) {
+      sound(0);
       var tail = {x: snakeX, y: snakeY}; //Create a new head instead of moving the tail
       score ++;
-
       createFood(); //Create new food
     } else {
       var tail = snake.pop(); //pops out the last cell
@@ -207,8 +215,6 @@ window.onload = function () {
     snake.unshift(tail); //puts back the tail as the first cell
 
     for(var i = 0; i < snake.length; i++) {
-      console.log(snake[i].y);
-      
       bodySnake(snake[i].x, snake[i].y);
     }
     createWalls();
@@ -247,9 +253,9 @@ window.onload = function () {
       }
     }
     for(var i = 0; i< walls.length; i++){
-      
+
       if(walls[i][0] === x && walls[i][1]=== y){
-        
+
         return true;
       }
     }
