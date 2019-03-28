@@ -9,7 +9,7 @@ window.onload = function () {
   var snake;
   var food;
   var ctx;
-  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3'];
+  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3'];
 
   var scores = [];
   var delay;
@@ -267,6 +267,7 @@ window.onload = function () {
     direction = 'down';
     drawSnake();
     createFood();
+    sound(2);
     gameloop = setInterval(paint, delay);
   }
 
