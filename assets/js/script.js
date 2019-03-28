@@ -1,6 +1,7 @@
 window.onload = function () {
   var path = './assets/niv/';
-  var extention = '.json';
+  var pathScore = './assets/scores'
+  var extension = '.json';
   var niv;
   var direction = 'down';
   var score = 0;
@@ -9,14 +10,15 @@ window.onload = function () {
   var food;
   var ctx;
 
+  var scores = [];
   var delay;
   var walls = [];
 
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
 
-  var canvasWidth = 700;
-  var canvasHeight = 500;
+  var canvasWidth = 1920;
+  var canvasHeight = 900;
   var canvasDiv = document.getElementById('canvasDiv');
   var btn = document.getElementById("startButton");
   btn.addEventListener("click", function(){
@@ -49,10 +51,27 @@ window.onload = function () {
   	   canvas = G_vmlCanvasManager.initElement(canvas);
     }
     ctx = canvas.getContext('2d');
+    canvasWidth = canvas.getAttribute("width");
+    canvasHeight = canvas.getAttribute("height");
+  }
+
+  function loadScore(){
+    fetch(pathScore+extension).then(function(response) {
+      if (response.ok) {
+          return response.json()
+      } else {
+          throw ("Error " + response.status);
+      }
+  }).then(function(data) {
+      scores = data.score;
+      init();
+
+  }).catch(function(err) {
+  });
   }
 
   function loadNiv(nbNiv){
-    fetch(path+nbNiv+extention).then(function(response) {
+    fetch(path+nbNiv+extension).then(function(response) {
         if (response.ok) {
             return response.json()
         } else {
@@ -109,6 +128,7 @@ window.onload = function () {
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
     btn.setAttribute('disabled', true);
+    btn.style.display ="none";
 
     var snakeX = snake[0].x;
     var snakeY = snake[0].y;
@@ -125,7 +145,7 @@ window.onload = function () {
     if (snakeX == -1 || snakeX == canvasWidth/snakeSize || snakeY == -1 || snakeY == canvasHeight/snakeSize || checkCollision(snakeX, snakeY, snake)) {
       //restart game
       btn.removeAttribute('disabled', true);
-
+      btn.style.display ="inline-block";
       ctx.clearRect(0,0,canvasWidth,canvasHeight);
       gameloop = clearInterval(gameloop);
       score = 0;
@@ -150,6 +170,8 @@ window.onload = function () {
     snake.unshift(tail); //puts back the tail as the first cell
 
     for(var i = 0; i < snake.length; i++) {
+      console.log(snake[i].y);
+      
       bodySnake(snake[i].x, snake[i].y);
     }
     createWalls();
@@ -159,8 +181,8 @@ window.onload = function () {
 
   var createFood = function() {
     food = {
-      x: Math.floor((Math.random() * (canvasWidth/100+snakeSize)) ),
-      y: Math.floor((Math.random() * (canvasHeight/100+snakeSize)) )
+      x: Math.floor((Math.random() * (canvasWidth/snakeSize))+1 ),
+      y: Math.floor((Math.random() * (canvasHeight/snakeSize))+1 )
     }
 
     for (var i=0; i>snake.length; i++) {
@@ -168,15 +190,15 @@ window.onload = function () {
       var snakeY = snake[i].y;
 
       if (food.x===snakeX && food.y === snakeY || food.y === snakeY && food.x===snakeX) {
-        food.x = Math.floor((Math.random() * (canvasWidth/100+snakeSize)) );
-        food.y = Math.floor((Math.random() * (canvasHeight/100+snakeSize)) );
+        food.x = Math.floor((Math.random() * (94)) );
+        food.y = Math.floor((Math.random() * (43)) );
       }
     }
 
     for(var i =0; i<walls.length; i++){
       if(walls[i][0]===food.x && walls[i][1]===food.y){
-        food.x = Math.floor((Math.random() * (canvasWidth/100+snakeSize)) );
-        food.y = Math.floor((Math.random() * (canvasHeight/100+snakeSize)) );
+        food.x = Math.floor((Math.random() * (window.innerWidth/10)) );
+        food.y = Math.floor((Math.random() * (window.innerHeight/10)) );
       }
     }
   }
