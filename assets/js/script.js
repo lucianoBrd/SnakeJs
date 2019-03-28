@@ -16,6 +16,12 @@ window.onload = function () {
     this.play();
 }, false);
 
+//déclaration variables pour gérer l'affichage du menu
+  var left = document.getElementById("left");
+  var right = document.getElementById("right");
+  var exit = document.getElementById("exit");
+  var circle = document.getElementById("circle");
+// end declaration
 
   var scores = [];
   var delay;
@@ -42,11 +48,6 @@ window.onload = function () {
   }
 
 
-  btn.addEventListener("click", function(){
-   // start();
-    //loadNiv(1);
-
-  });
 
   document.getElementById("niv1").addEventListener("click", function(){
     start();
@@ -79,8 +80,7 @@ window.onload = function () {
   	   canvas = G_vmlCanvasManager.initElement(canvas);
     }
     ctx = canvas.getContext('2d');
-    canvasWidth = canvas.getAttribute("width");
-    canvasHeight = canvas.getAttribute("height");
+   
   }
 
   function loadScore(){
@@ -98,7 +98,7 @@ window.onload = function () {
   });
   }
 
-  var scoreButton = document.getElementById("scoreButton");
+  /*var scoreButton = document.getElementById("scoreButton");
 
   scoreButton.addEventListener("click", function(){
     loadScore();
@@ -119,7 +119,7 @@ window.onload = function () {
 
 
 
-  });
+  });*/
 
   function loadNiv(nbNiv){
     fetch(path+nbNiv+extension).then(function(response) {
@@ -178,8 +178,13 @@ window.onload = function () {
     ctx.strokeStyle = 'black';
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
-    btn.setAttribute('disabled', true);
-    btn.style.display ="none";
+    
+//desactivation des éléments persistants sur le canvas (menu)
+    left.style.display="none";
+    right.style.display="none";
+    exit.style.display="none";
+    circle.style.display="none";
+//end
 
     var snakeX = snake[0].x;
     var snakeY = snake[0].y;
@@ -196,17 +201,23 @@ window.onload = function () {
     if (snakeX == -1 || snakeX == canvasWidth/snakeSize || snakeY == -1 || snakeY == canvasHeight/snakeSize || checkCollision(snakeX, snakeY, snake)) {
       //restart game
       sound(1);
-      btn.removeAttribute('disabled', true);
-      btn.style.display ="inline-block";
       ctx.clearRect(0,0,canvasWidth,canvasHeight);
       gameloop = clearInterval(gameloop);
       score = 0;
       game.pause();
       game.currentTime = 0;
       setTimeout(function(){
-
         canvas.style.display = "none";
+//réactivation menu
+      left.style.display="inline-block";
+      right.style.display="inline-block";
+      exit.style.display="inline-block";
+      circle.style.display="inline-block";
+//end
       }, 1300);
+
+
+
       return;
     }
 
