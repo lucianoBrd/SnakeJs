@@ -64,10 +64,6 @@ window.onload = function () {
     audio.play();
   }
 
-  /*var soundStop = function(select){
-    var audio = new Audio(music[select]);
-    audio.play();
-  }*/
 
   var start = function(){
     canvas = document.createElement('canvas');
