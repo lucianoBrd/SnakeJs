@@ -10,6 +10,8 @@ window.onload = function () {
   var food;
   var ctx;
   var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3'];
+  var game = new Audio(music[2]);
+
 
   var scores = [];
   var delay;
@@ -194,6 +196,8 @@ window.onload = function () {
       ctx.clearRect(0,0,canvasWidth,canvasHeight);
       gameloop = clearInterval(gameloop);
       score = 0;
+      game.pause();
+      game.currentTime = 0;
       setTimeout(function(){
 
         canvas.style.display = "none";
@@ -267,7 +271,7 @@ window.onload = function () {
     direction = 'down';
     drawSnake();
     createFood();
-    sound(2);
+    game.play();
     gameloop = setInterval(paint, delay);
   }
 
