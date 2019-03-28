@@ -218,8 +218,8 @@ window.onload = function () {
 
   var createFood = function() {
     food = {
-      x: Math.floor((Math.random() * (canvasWidth/snakeSize))+1 ),
-      y: Math.floor((Math.random() * (canvasHeight/snakeSize))+1 )
+      x: Math.floor((Math.random() * (94)) ),
+      y: Math.floor((Math.random() * (43)) )
     }
 
     for (var i=0; i>snake.length; i++) {
@@ -234,8 +234,8 @@ window.onload = function () {
 
     for(var i =0; i<walls.length; i++){
       if(walls[i][0]===food.x && walls[i][1]===food.y){
-        food.x = Math.floor((Math.random() * (window.innerWidth/10)) );
-        food.y = Math.floor((Math.random() * (window.innerHeight/10)) );
+        food.x = Math.floor((Math.random() * (94)) );
+        food.y = Math.floor((Math.random() * (43)) );
       }
     }
   }
