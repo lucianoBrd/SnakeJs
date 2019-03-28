@@ -9,7 +9,7 @@ window.onload = function () {
   var snake;
   var food;
   var ctx;
-  var music = ['./assets/sound/eat.mp3'];
+  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3'];
 
   var scores = [];
   var delay;
@@ -39,7 +39,6 @@ window.onload = function () {
   btn.addEventListener("click", function(){
    // start();
     //loadNiv(1);
-    sound(0);
 
   });
 
@@ -189,6 +188,7 @@ window.onload = function () {
 
     if (snakeX == -1 || snakeX == canvasWidth/snakeSize || snakeY == -1 || snakeY == canvasHeight/snakeSize || checkCollision(snakeX, snakeY, snake)) {
       //restart game
+      sound(1);
       btn.removeAttribute('disabled', true);
       btn.style.display ="inline-block";
       ctx.clearRect(0,0,canvasWidth,canvasHeight);
