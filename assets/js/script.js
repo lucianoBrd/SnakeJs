@@ -6,6 +6,7 @@
 --> Fonctions d'affichage des éléments
 --> Fonctions de calcul des coordonnées et traitements sur les variables
 --> Méthode principale (Paint)
+--> Modal
 --------------------- fin ---------------------
 */
 
@@ -74,14 +75,7 @@ window.onload = function () {
 
 
 /*------------------------------------------------------------partie gestion des scores (temporairement délaissée)--------------------------------------------------*/
-  var modal = document.getElementById("modalbody");
   loadScore(); //chargement initial des scores
-  /*for(var i =0; i<scores.length; i++) //premier remplissage du modal (pour les scores (inutile pour linstant))
-  {
-    txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
-    modal.appendChild(txt);
-    modal.appendChild(document.createElement('hr'));
-  }*/
 
   var checkScore = function(score){
     loadScore();
@@ -103,6 +97,7 @@ window.onload = function () {
         break;
     }
     fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3);
+    printScore();
   }
 
   function loadScore(){
@@ -116,30 +111,21 @@ window.onload = function () {
         niv1 = data.Niveau1;
         niv2 = data.Niveau2;
         niv3 = data.Niveau3;
-
+        printScore();
 
       }).catch(function(err) {});
     }
 
   //Fonction pour l'affichage des scores
-  /*var scoreButton = document.getElementById("scoreButton");
-  scoreButton.addEventListener("click", function(){
-    loadScore();
-    for (let i = 0; i < modal.children.length; i++) {
-      remove(modal.children[i]);
-    }
+  var printScore = function(){
+    var niv1S = document.getElementById("niv1S");
+    var niv2S = document.getElementById("niv2S");
+    var niv3S = document.getElementById("niv3S");
 
-    var txt;
-    for(var i =0; i<scores.length; i++){
-
-      txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
-
-      modal.appendChild(txt);
-      modal.appendChild(document.createElement('hr'));
-
-
-    }
-  });*/
+    niv1S.textContent = niv1;
+    niv2S.textContent = niv2;
+    niv3S.textContent = niv3;
+  }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------end
 
@@ -384,6 +370,7 @@ window.onload = function () {
       ctx.clearRect(0,0,canvasWidth,canvasHeight); //clean du canvas
       gameloop = clearInterval(gameloop); //stop la boucle de jeu
       checkScore(score);
+      printScore();
       score = 0; //reinitialise le score
       game.pause();//met la musique de fonc en pause
       game.currentTime = 0; //reinitialise la musique de fond
@@ -424,7 +411,161 @@ window.onload = function () {
   }
 //------------------------------------------------------------------------------------end paint---------------------------------------------------------------------------------
 
+//-----------------------------------------------------------------modal----------------------------------------------
 
+    // Define our constructor
+    this.Modal = function() {
+
+      // Create global element references
+      this.closeButton = null;
+      this.modal = null;
+      this.overlay = null;
+
+      // Determine proper prefix
+      this.transitionEnd = transitionSelect();
+
+      // Define option defaults
+      var defaults = {
+        autoOpen: false,
+        className: 'fade-and-drop',
+        closeButton: true,
+        content: "",
+        maxWidth: 600,
+        minWidth: 280,
+        overlay: true
+      }
+
+      // Create options by extending defaults with the passed in arugments
+      if (arguments[0] && typeof arguments[0] === "object") {
+        this.options = extendDefaults(defaults, arguments[0]);
+      }
+
+      if(this.options.autoOpen === true) this.open();
+
+    }
+
+    // Public Methods
+
+    Modal.prototype.close = function() {
+      var _ = this;
+      this.modal.className = this.modal.className.replace(" scotch-open", "");
+      this.overlay.className = this.overlay.className.replace(" scotch-open",
+        "");
+      this.modal.addEventListener(this.transitionEnd, function() {
+        _.modal.parentNode.removeChild(_.modal);
+      });
+      this.overlay.addEventListener(this.transitionEnd, function() {
+        if(_.overlay.parentNode) _.overlay.parentNode.removeChild(_.overlay);
+      });
+    }
+
+    Modal.prototype.open = function() {
+      buildOut.call(this);
+      initializeEvents.call(this);
+      window.getComputedStyle(this.modal).height;
+      this.modal.className = this.modal.className +
+        (this.modal.offsetHeight > window.innerHeight ?
+          " scotch-open scotch-anchored" : " scotch-open");
+      this.overlay.className = this.overlay.className + " scotch-open";
+    }
+
+    // Private Methods
+
+    function buildOut() {
+
+      var content, contentHolder, docFrag;
+
+      /*
+       * If content is an HTML string, append the HTML string.
+       * If content is a domNode, append its content.
+       */
+
+      if (typeof this.options.content === "string") {
+        content = this.options.content;
+      } else {
+        content = this.options.content.innerHTML;
+      }
+
+      // Create a DocumentFragment to build with
+      docFrag = document.createDocumentFragment();
+
+      // Create modal element
+      this.modal = document.createElement("div");
+      this.modal.className = "scotch-modal " + this.options.className;
+      this.modal.style.minWidth = this.options.minWidth + "px";
+      this.modal.style.maxWidth = this.options.maxWidth + "px";
+
+      // If closeButton option is true, add a close button
+      if (this.options.closeButton === true) {
+        this.closeButton = document.createElement("button");
+        this.closeButton.className = "scotch-close close-button";
+        this.closeButton.innerHTML = "&times;";
+        this.modal.appendChild(this.closeButton);
+      }
+
+      // If overlay is true, add one
+      if (this.options.overlay === true) {
+        this.overlay = document.createElement("div");
+        this.overlay.className = "scotch-overlay " + this.options.className;
+        docFrag.appendChild(this.overlay);
+      }
+
+      // Create content area and append to modal
+      contentHolder = document.createElement("div");
+      contentHolder.className = "scotch-content";
+      contentHolder.innerHTML = content;
+      this.modal.appendChild(contentHolder);
+
+      // Append modal to DocumentFragment
+      docFrag.appendChild(this.modal);
+
+      // Append DocumentFragment to body
+      document.body.appendChild(docFrag);
+
+    }
+
+    function extendDefaults(source, properties) {
+      var property;
+      for (property in properties) {
+        if (properties.hasOwnProperty(property)) {
+          source[property] = properties[property];
+        }
+      }
+      return source;
+    }
+
+    function initializeEvents() {
+
+      if (this.closeButton) {
+        this.closeButton.addEventListener('click', this.close.bind(this));
+      }
+
+      if (this.overlay) {
+        this.overlay.addEventListener('click', this.close.bind(this));
+      }
+
+    }
+
+    function transitionSelect() {
+      var el = document.createElement("div");
+      if (el.style.WebkitTransition) return "webkitTransitionEnd";
+      if (el.style.OTransition) return "oTransitionEnd";
+      return 'transitionend';
+    }
+
+
+  var myContent = document.getElementById('content');
+
+  var myModal = new Modal({
+    content: myContent
+  });
+
+  var triggerButton = document.getElementById('trigger');
+
+  triggerButton.addEventListener('click', function() {
+    myModal.open();
+  });
+//------------------------------------------------------------------------------------end modal---------------------------------------------------------------------------------
 
 
 
