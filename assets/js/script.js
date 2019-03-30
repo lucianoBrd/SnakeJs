@@ -228,6 +228,7 @@ window.onload = function () {
   var scoreText = function() {
     var score_text = "Score: " + score;
     ctx.fillStyle = 'lightgray';
+    ctx.font = "30px Arial";
     ctx.fillText(score_text, canvasWidth/2, canvasHeight-5);
   }
 //end
