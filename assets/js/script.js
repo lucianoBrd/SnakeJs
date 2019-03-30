@@ -1,56 +1,87 @@
+/*
+---------------------Plan du code---------------------
+--> Déclaration des variables du jeu
+--> Gestion des meilleurs scores (mise de côté temporairement)
+--> Initialisation de l'environnement de jeu
+--> Fonctions d'affichage des éléments
+--> Fonctions de calcul des coordonnées et traitements sur les variables
+--> Méthode principale (Paint)
+--------------------- fin ---------------------
+*/
+
 window.onload = function () {
+
+//-------------------------------------------------------------partie déclaration des variables du jeu-------------------------------------------------------------
+
+//déclaration variables d'accès pour les fichier json
   var path = './assets/niv/';
   var pathScore = './assets/scores/score'
   var extension = '.json';
-  var niv;
-  var direction = 'down';
-  var score = 0;
-  var snakeSize = 20;
-  var snake;
-  var food;
-  var ctx;
-  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3'];
+//end
+
+//déclaration variables pour le jeu
+  var niv; //choix du niveau
+  var direction = 'down'; // direction du joueur
+  var score = 0; //score
+  var snakeSize = 20; //taille du snake
+  var snake; //tab
+  var food; //tab pour les fruits
+  var ctx; //contexte du canvas
+//end
+
+//déclaration variables son
+  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3']; //chemins vers différents sons
   var game = new Audio(music[2]);
-  game.addEventListener('ended', function() {
+  game.addEventListener('ended', function() { //fonction de loop de la musique en cours
     this.currentTime = 0;
     this.play();
   }, false);
 
+  var sound = function(select){
+    var audio = new Audio(music[select]);
+    audio.play();
+  }
+//end
 
+//déclaration variables pour gérer l'affichage du menu
+  var left = document.getElementById("left");
+  var right = document.getElementById("right");
+  var exit = document.getElementById("exit");
+  var circle = document.getElementById("circle");
+// end declaration
+
+//déclaration variables relatives à un niveau (JSON)
   var niv1;
   var niv2;
   var niv3;
   var nowNiv;
   var delay;
   var walls = [];
+//end
 
+//déclaration variables images
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
+//end
 
-  var canvasWidth = 1920;
+
+  var canvasWidth = 1920;//propriétés du canvas
   var canvasHeight = 900;
-  var canvasDiv = document.getElementById('canvasDiv');
-  var mainContainer = document.getElementById("main");
+
+  var canvasDiv = document.getElementById('canvasDiv'); //accès au dom (div du canvas)
+
+//-----------------------------------------------------------------------end partie declaration de variables----------------------------------------------------------------
+
+
+/*------------------------------------------------------------partie gestion des scores (temporairement délaissée)--------------------------------------------------*/
   var modal = document.getElementById("modalbody");
-  var btn = document.getElementById("startButton");
-
   loadScore(); //chargement initial des scores
-
-  function loadScore(){
-      fetch(pathScore+extension).then(function(response) {
-        if (response.ok) {
-            return response.json()
-        } else {
-            throw ("Error " + response.status);
-        }
-      }).then(function(data) {
-        niv1 = data.Niveau1;
-        niv2 = data.Niveau2;
-        niv3 = data.Niveau3;
-
-
-      }).catch(function(err) {});
-    }
+  /*for(var i =0; i<scores.length; i++) //premier remplissage du modal (pour les scores (inutile pour linstant))
+  {
+    txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
+    modal.appendChild(txt);
+    modal.appendChild(document.createElement('hr'));
+  }*/
 
   var checkScore = function(score){
     loadScore();
@@ -74,13 +105,48 @@ window.onload = function () {
     fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3);
   }
 
+  function loadScore(){
+      fetch(pathScore+extension).then(function(response) {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw ("Error " + response.status);
+        }
+      }).then(function(data) {
+        niv1 = data.Niveau1;
+        niv2 = data.Niveau2;
+        niv3 = data.Niveau3;
 
-  btn.addEventListener("click", function(){
-   // start();
-    //loadNiv(1);
 
-  });
+      }).catch(function(err) {});
+    }
 
+  //Fonction pour l'affichage des scores
+  /*var scoreButton = document.getElementById("scoreButton");
+  scoreButton.addEventListener("click", function(){
+    loadScore();
+    for (let i = 0; i < modal.children.length; i++) {
+      remove(modal.children[i]);
+    }
+
+    var txt;
+    for(var i =0; i<scores.length; i++){
+
+      txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
+
+      modal.appendChild(txt);
+      modal.appendChild(document.createElement('hr'));
+
+
+    }
+  });*/
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------end
+
+
+//--------------------------------------------------------------------Partie début de jeu avec initialisation des features--------------------------------------------
+
+//ajout des listener sur les différents boutons du menu
   document.getElementById("niv1").addEventListener("click", function(){
     start();
     loadNiv(1);
@@ -98,13 +164,9 @@ window.onload = function () {
     loadNiv(3);
     nowNiv = 3;
   });
+//end
 
-  var sound = function(select){
-    var audio = new Audio(music[select]);
-    audio.play();
-  }
-
-
+//fonction qui active le canvas, affiche le plateau de jeu
   var start = function(){
     canvas = document.createElement('canvas');
     canvas.setAttribute('width', canvasWidth);
@@ -115,35 +177,10 @@ window.onload = function () {
   	   canvas = G_vmlCanvasManager.initElement(canvas);
     }
     ctx = canvas.getContext('2d');
-    canvasWidth = canvas.getAttribute("width");
-    canvasHeight = canvas.getAttribute("height");
   }
+//end
 
-
-
-  var scoreButton = document.getElementById("scoreButton");
-
-  scoreButton.addEventListener("click", function(){
-    loadScore();
-    for (let i = 0; i < modal.children.length; i++) {
-      remove(modal.children[i]);
-    }
-
-    var txt;
-    for(var i =0; i<scores.length; i++){
-
-      txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
-
-      modal.appendChild(txt);
-      modal.appendChild(document.createElement('hr'));
-
-
-    }
-
-
-
-  });
-
+//fonction qui va récupérer les données d'un niveau
   function loadNiv(nbNiv){
     fetch(path+nbNiv+extension).then(function(response) {
         if (response.ok) {
@@ -160,33 +197,60 @@ window.onload = function () {
     }).catch(function(err) {
     });
   }
+//end
 
+//fonction d'initialisation du snake, nourriture, musique et répétition de la fonction paint
+  var init = function(){
+    direction = 'down';
+    drawSnake();
+    createFood();
+    game.play();
+    gameloop = setInterval(paint, delay);
+  }
+//end
+
+//--------------------------------------------------------------------------end initialisation--------------------------------------------------------------
+
+
+//--------------------------------------------------------------------------Fonctions d'affichage----------------------------------------------------------
+
+//fonction qui affiche les murs d'un nivau s'il en a
   var createWalls = function(){
-
     for(var i = 0; i<walls.length; i++){
       ctx.fillStyle = 'red';
       ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
     }
   }
+//end
 
-
-  var bodySnake = function(x, y) { //
+//fonction qui affiche le corps du serpent
+  var bodySnake = function(x, y) {
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
     ctx.strokeStyle = 'lightgray';
     ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
+//
 
+//fonction qui affiche notre marine nationale
   var fruit = function(x, y) {
     ctx.drawImage(img, x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
+//end
 
+//fonction qui affiche le score courant
   var scoreText = function() {
     var score_text = "Score: " + score;
     ctx.fillStyle = 'lightgray';
     ctx.fillText(score_text, canvasWidth/2, canvasHeight-5);
   }
+//end
+//---------------------------------------------------------------------------------end fonctions affichage----------------------------------------------------------------
 
+
+//---------------------------------------------------------partie calcul des coordonnées et mises a jour des tableaux de données-----------------------------------------------
+
+//fonction qui remplit le tableau du snake (ensuite bodysnake affiche en fct du tableau)
   var drawSnake = function() {
     var length = 4;
     snake = [];
@@ -194,73 +258,17 @@ window.onload = function () {
         snake.push({x:i, y:0});
     }
   }
+//end
 
-  var paint = function(){
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.strokeStyle = 'black';
-    ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
-
-    btn.setAttribute('disabled', true);
-    btn.style.display ="none";
-
-    var snakeX = snake[0].x;
-    var snakeY = snake[0].y;
-
-    if (direction == 'right') {
-      snakeX++; }
-    else if (direction == 'left') {
-      snakeX--; }
-    else if (direction == 'up') {
-      snakeY--;
-    } else if(direction == 'down') {
-      snakeY++; }
-
-    if (snakeX == -1 || snakeX == canvasWidth/snakeSize || snakeY == -1 || snakeY == canvasHeight/snakeSize || checkCollision(snakeX, snakeY, snake)) {
-      //restart game
-      sound(1);
-      btn.removeAttribute('disabled', true);
-      btn.style.display ="inline-block";
-      ctx.clearRect(0,0,canvasWidth,canvasHeight);
-      gameloop = clearInterval(gameloop);
-      checkScore(score);
-      score = 0;
-      game.pause();
-      game.currentTime = 0;
-      setTimeout(function(){
-
-        canvas.style.display = "none";
-      }, 1300);
-      return;
-    }
-
-    if(snakeX == food.x && snakeY == food.y) {
-      sound(0);
-      var tail = {x: snakeX, y: snakeY}; //Create a new head instead of moving the tail
-      score ++;
-      createFood(); //Create new food
-    } else {
-      var tail = snake.pop(); //pops out the last cell
-      tail.x = snakeX;
-      tail.y = snakeY;
-    }
-    //The snake can now eat the food.
-    snake.unshift(tail); //puts back the tail as the first cell
-
-    for(var i = 0; i < snake.length; i++) {
-      bodySnake(snake[i].x, snake[i].y);
-    }
-    createWalls();
-    fruit(food.x, food.y);
-    scoreText();
-  }
-
+//fonction qui génère une position pour marine en vérifiant qu'elle ne va pas la ou elle n'a pas le droit d'aller !
   var createFood = function() {
+
     food = {
-      x: Math.floor((Math.random() * (94)) ),
-      y: Math.floor((Math.random() * (43)) )
+      x: Math.floor((Math.random() * (94)) ), //génération random des positions (x compris entre 0 et 95 [puis multiplié par la taille du snake])
+      y: Math.floor((Math.random() * (43)) )  // y compris entre 0 et 44 puis multiplié par la taille du snake
     }
 
+    //boucle pour tester  si marine apparait sur le snake
     for (var i=0; i>snake.length; i++) {
       var snakeX = snake[i].x;
       var snakeY = snake[i].y;
@@ -270,44 +278,42 @@ window.onload = function () {
         food.y = Math.floor((Math.random() * (43)) );
       }
     }
+    //end
 
+    //boucle pour tester si marine apparait sur un mur
     for(var i =0; i<walls.length; i++){
+
       if(walls[i][0]===food.x && walls[i][1]===food.y){
         food.x = Math.floor((Math.random() * (94)) );
         food.y = Math.floor((Math.random() * (43)) );
       }
     }
-  }
+    //end
 
+  }
+//end
+
+//fonction qui vérifie si le serpent est entré en collision avec lui meme et les murs la bordure est directement dans le test dans paint
   var checkCollision = function(x, y, array) {
-    for(var i = 0; i < array.length; i++) {
+    for(var i = 0; i < array.length; i++) { //teste avec sa queue
       if(array[i].x === x && array[i].y === y){
         return true;
       }
     }
-    for(var i = 0; i< walls.length; i++){
 
+    for(var i = 0; i< walls.length; i++){ //teste avec les murs
       if(walls[i][0] === x && walls[i][1]=== y){
-
         return true;
       }
     }
+
     return false;
   }
+//end
 
-
-  var init = function(){
-    direction = 'down';
-    drawSnake();
-    createFood();
-    game.play();
-    gameloop = setInterval(paint, delay);
-  }
-
+//fonction de capture des évènements clics
   document.onkeydown = function(event) {
-
     keyCode = window.event.keyCode;
-
     switch(keyCode) {
 
     case 37:
@@ -335,6 +341,91 @@ window.onload = function () {
       break;
     }
   }
+//end
+
+//--------------------------------------------------------------------------end partie coordonnées-----------------------------------------------------------------------
+
+//-----------------------------------------------------------------fonction centrale paint, appelée pour dessiner le plateau----------------------------------------------
+ var paint = function(){
+  //affichage du canvas
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+  //end
+
+  //desactivation des éléments persistants sur le canvas (menu)
+    left.style.display="none";
+    right.style.display="none";
+    exit.style.display="none";
+    circle.style.display="none";
+  //end
+
+  //récuperation position serpent
+    var snakeX = snake[0].x;
+    var snakeY = snake[0].y;
+  //end
+
+  //gestion direction du serpent (avec methode onkeydown)
+    if (direction == 'right') {
+      snakeX++; }
+    else if (direction == 'left') {
+      snakeX--; }
+    else if (direction == 'up') {
+      snakeY--;
+    } else if(direction == 'down') {
+      snakeY++; }
+  //end
+
+  //si le joueur entre en collision avec soi-meme, un mur ou une bordure
+    if (snakeX == -1 || snakeX == canvasWidth/snakeSize || snakeY == -1 || snakeY == canvasHeight/snakeSize || checkCollision(snakeX, snakeY, snake)) {
+    //restart game
+      sound(1); //activation musique de perte
+      ctx.clearRect(0,0,canvasWidth,canvasHeight); //clean du canvas
+      gameloop = clearInterval(gameloop); //stop la boucle de jeu
+      checkScore(score);
+      score = 0; //reinitialise le score
+      game.pause();//met la musique de fonc en pause
+      game.currentTime = 0; //reinitialise la musique de fond
+      setTimeout(function(){ //laisse la photo de fin
+        canvas.style.display = "none";
+      //réactivation menu
+        left.style.display="inline-block";
+        right.style.display="inline-block";
+        exit.style.display="inline-block";
+        circle.style.display="inline-block";
+
+      }, 1300);
+      return; //sors de la fonction
+    }
+  //end
+
+  //si le serpent mange marine
+    if(snakeX == food.x && snakeY == food.y) {
+      sound(0); //lance le bruitage holywoodien
+      var tail = {x: snakeX, y: snakeY}; //créer une nouvelle tête à la place de l'ajouter
+      score ++; //incrémente le score
+      createFood(); //ajoute une nouvelle marine
+    } else {
+      var tail = snake.pop(); //enleve la case
+      tail.x = snakeX; //rechoisit la bonne case pour la tete
+      tail.y = snakeY;
+    }
+
+    snake.unshift(tail); //remet la tete a la premiere  case
+
+    for(var i = 0; i < snake.length; i++) { // dessine entierement le serpent avec la bonne taille
+      bodySnake(snake[i].x, snake[i].y);
+    }
+
+    createWalls(); //affiche les murs
+    fruit(food.x, food.y); // affiche le fruit
+    scoreText(); //affiche le score
+  }
+//------------------------------------------------------------------------------------end paint---------------------------------------------------------------------------------
+
+
+
 
 
 
