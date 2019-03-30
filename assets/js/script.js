@@ -14,10 +14,13 @@ window.onload = function () {
   game.addEventListener('ended', function() {
     this.currentTime = 0;
     this.play();
-}, false);
+  }, false);
 
 
-  var scores = [];
+  var niv1;
+  var niv2;
+  var niv3;
+  var nowNiv;
   var delay;
   var walls = [];
 
@@ -32,13 +35,43 @@ window.onload = function () {
   var btn = document.getElementById("startButton");
 
   loadScore(); //chargement initial des scores
-  for(var i =0; i<scores.length; i++){ //premier remplissage du modal
 
-    txt = document.createTextNode(scores[i][0]+" : "+scores[i][1]);
+  function loadScore(){
+      fetch(pathScore+extension).then(function(response) {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw ("Error " + response.status);
+        }
+      }).then(function(data) {
+        niv1 = data.Niveau1;
+        niv2 = data.Niveau2;
+        niv3 = data.Niveau3;
 
-    modal.appendChild(txt);
-    modal.appendChild(document.createElement('hr'));
 
+      }).catch(function(err) {});
+    }
+
+  var checkScore = function(score){
+    loadScore();
+    switch(nowNiv){
+      case 1:
+        if(score > niv1){
+          niv1 = score;
+        }
+        break;
+      case 2:
+        if(score > niv2){
+          niv2 = score;
+        }
+        break;
+      case 3:
+        if(score > niv3){
+          niv3 = score;
+        }
+        break;
+    }
+    fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3);
   }
 
 
@@ -51,16 +84,19 @@ window.onload = function () {
   document.getElementById("niv1").addEventListener("click", function(){
     start();
     loadNiv(1);
+    nowNiv = 1;
   });
 
   document.getElementById("niv2").addEventListener("click", function(){
     start();
     loadNiv(2);
+    nowNiv = 2;
   });
 
   document.getElementById("niv3").addEventListener("click", function(){
     start();
     loadNiv(3);
+    nowNiv = 3;
   });
 
   var sound = function(select){
@@ -83,20 +119,7 @@ window.onload = function () {
     canvasHeight = canvas.getAttribute("height");
   }
 
-  function loadScore(){
-    fetch(pathScore+extension).then(function(response) {
-      if (response.ok) {
-          return response.json()
-      } else {
-          throw ("Error " + response.status);
-      }
-  }).then(function(data) {
-      scores = data.score;
 
-
-  }).catch(function(err) {
-  });
-  }
 
   var scoreButton = document.getElementById("scoreButton");
 
@@ -200,6 +223,7 @@ window.onload = function () {
       btn.style.display ="inline-block";
       ctx.clearRect(0,0,canvasWidth,canvasHeight);
       gameloop = clearInterval(gameloop);
+      checkScore(score);
       score = 0;
       game.pause();
       game.currentTime = 0;
