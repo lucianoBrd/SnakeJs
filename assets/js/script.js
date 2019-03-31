@@ -78,7 +78,6 @@ window.onload = function () {
   loadScore(); //chargement initial des scores
 
   var checkScore = function(score){
-    loadScore();
     switch(nowNiv){
       case 1:
         if(score > niv1){
