@@ -212,7 +212,7 @@ window.onload = function () {
   var bodySnake = function(x, y) {
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = 'lightgray';
+    ctx.strokeStyle = 'red';
     ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
 //
