@@ -28,6 +28,11 @@ window.onload = function () {
   var snake; //tab
   var food; //tab pour les fruits
   var ctx; //contexte du canvas
+  var canvasColorBack = 'black';
+  var canvasColorStroke = 'black';
+  var wallsColor = 'red';
+  var colorBodySnake = 'lightgray';
+  var colorSnakeStroke = 'gray';
 //end
 
 //déclaration variables son
@@ -52,9 +57,10 @@ window.onload = function () {
 // end declaration
 
 //déclaration variables relatives à un niveau (JSON)
-  var niv1;
-  var niv2;
-  var niv3;
+  var niv1;//pour les score du niveau 1
+  var niv2; //score du niveau 2
+  var niv3; //score du niveau 3
+  var niv4; //score du niveau folie
   var nowNiv;
   var delay;
   var walls = [];
@@ -77,7 +83,7 @@ window.onload = function () {
 /*------------------------------------------------------------partie gestion des scores (temporairement délaissée)--------------------------------------------------*/
   loadScore(); //chargement initial des scores
 
-  var checkScore = function(score){
+  var checkScore = function(score){ // fonction qui gère si le score courant est un meilleur score
     switch(nowNiv){
       case 1:
         if(score > niv1){
@@ -94,12 +100,17 @@ window.onload = function () {
           niv3 = score;
         }
         break;
+      case 4:
+        if(score > niv4){
+          niv4 = score;
+        }
+        break;
     }
-    fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3);
+    fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3+'&4='+niv4); // si oui on lance le fichier php qui va modifier le fichier json
     printScore();
   }
 
-  function loadScore(){
+  function loadScore(){ //récupère les scores  dans le fichier json
       fetch(pathScore+extension).then(function(response) {
         if (response.ok) {
             return response.json()
@@ -110,6 +121,7 @@ window.onload = function () {
         niv1 = data.Niveau1;
         niv2 = data.Niveau2;
         niv3 = data.Niveau3;
+        niv4 = data.Niveau4;
         printScore();
 
       }).catch(function(err) {});
@@ -120,10 +132,12 @@ window.onload = function () {
     var niv1S = document.getElementById("niv1S");
     var niv2S = document.getElementById("niv2S");
     var niv3S = document.getElementById("niv3S");
+    var niv4S = document.getElementById("niv4S");
 
     niv1S.textContent = niv1;
     niv2S.textContent = niv2;
     niv3S.textContent = niv3;
+    niv4S.textContent = niv4;
   }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------end
@@ -148,6 +162,12 @@ window.onload = function () {
     start();
     loadNiv(3);
     nowNiv = 3;
+  });
+
+  document.getElementById("exit").addEventListener("click", function(){
+    start();
+    loadNiv(4);
+    nowNiv = 4;
   });
 //end
 
@@ -191,6 +211,26 @@ window.onload = function () {
     createFood();
     game.play();
     gameloop = setInterval(paint, delay);
+
+    if(nowNiv===4){
+      acceleration = setInterval(function(){
+        delay-=1;
+        gameloop = clearInterval(gameloop);
+        gameloop = setInterval(paint, delay);
+      }, 2000);
+
+      fruitChange = setInterval(function(){
+        createFood();
+        fruit(food.x, food.y);
+      }, 6000)
+      gameColors = setInterval(function(){
+        canvasColorBack = 'gray';
+        canvasColorStroke = 'gray';
+        wallsColor = 'white';
+        colorBodySnake = 'black';
+        colorSnakeStroke = 'black';
+      }, 10000);
+    }
   }
 //end
 
@@ -200,19 +240,19 @@ window.onload = function () {
 //--------------------------------------------------------------------------Fonctions d'affichage----------------------------------------------------------
 
 //fonction qui affiche les murs d'un nivau s'il en a
-  var createWalls = function(){
+  var createWalls = function(color){
     for(var i = 0; i<walls.length; i++){
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = color;
       ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
     }
   }
 //end
 
 //fonction qui affiche le corps du serpent
-  var bodySnake = function(x, y) {
-    ctx.fillStyle = 'lightgray';
+  var bodySnake = function(x, y, color, strokeColor) {
+    ctx.fillStyle = color;
     ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = 'red';
+    ctx.strokeStyle = strokeColor;
     ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
   }
 //
@@ -334,9 +374,9 @@ window.onload = function () {
 //-----------------------------------------------------------------fonction centrale paint, appelée pour dessiner le plateau----------------------------------------------
  var paint = function(){
   //affichage du canvas
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = canvasColorBack;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = canvasColorStroke;
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
   //end
 
@@ -369,6 +409,10 @@ window.onload = function () {
       sound(1); //activation musique de perte
       ctx.clearRect(0,0,canvasWidth,canvasHeight); //clean du canvas
       gameloop = clearInterval(gameloop); //stop la boucle de jeu
+      if(nowNiv===4){
+        acceleration = clearInterval(acceleration);
+        fruitChange = clearInterval(fruitChange);
+      }
       checkScore(score);
       printScore();
       score = 0; //reinitialise le score
@@ -402,10 +446,11 @@ window.onload = function () {
     snake.unshift(tail); //remet la tete a la premiere  case
 
     for(var i = 0; i < snake.length; i++) { // dessine entierement le serpent avec la bonne taille
-      bodySnake(snake[i].x, snake[i].y);
+      bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke);
     }
+    
 
-    createWalls(); //affiche les murs
+    createWalls(wallsColor); //affiche les murs
     fruit(food.x, food.y); // affiche le fruit
     scoreText(); //affiche le score
   }
