@@ -36,12 +36,9 @@ window.onload = function () {
 //end
 
 //déclaration variables son
-  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3']; //chemins vers différents sons
-  var game = new Audio(music[2]);
-  game.addEventListener('ended', function() { //fonction de loop de la musique en cours
-    this.currentTime = 0;
-    this.play();
-  }, false);
+  var music = ['./assets/sound/eat.mp3', './assets/sound/loose.mp3', './assets/sound/game.mp3', './assets/sound/crazie.mp3', './assets/sound/crazie/banzai.mp3', './assets/sound/crazie/bouche.mp3', './assets/sound/crazie/debile.mp3', './assets/sound/crazie/kung_fu.mp3', './assets/sound/crazie/oui.mp3', './assets/sound/crazie/siren.mp3']; //chemins vers différents sons
+  var game;
+
 
   var sound = function(select){
     var audio = new Audio(music[select]);
@@ -206,6 +203,7 @@ window.onload = function () {
 
 //fonction d'initialisation du snake, nourriture, musique et répétition de la fonction paint
   var init = function(){
+    game = new Audio(music[2]);
     direction = 'down';
     canvasColorBack = 'black';
     canvasColorStroke = 'black';
@@ -214,10 +212,10 @@ window.onload = function () {
     colorSnakeStroke = 'gray';
     drawSnake();
     createFood();
-    game.play();
-    gameloop = setInterval(paint, delay);
+
 
     if(nowNiv===4){
+      game = new Audio(music[3]);
       acceleration = setInterval(function(){
         delay-=1;
         gameloop = clearInterval(gameloop);
@@ -241,6 +239,12 @@ window.onload = function () {
         colorSnakeStroke = tmps;
       }, 1000);
     }
+    game.play();
+    gameloop = setInterval(paint, delay);
+    game.addEventListener('ended', function() { //fonction de loop de la musique en cours
+      this.currentTime = 0;
+      this.play();
+    }, false);
   }
 //end
 
@@ -456,7 +460,12 @@ function getRandomColor() {
 
   //si le serpent mange marine
     if(snakeX == food.x && snakeY == food.y) {
-      sound(0); //lance le bruitage holywoodien
+
+      if(nowNiv == 4){
+        sound(Math.floor(Math.random() * (9 - 4 + 1)) + 4);
+      } else {
+        sound(0); //lance le bruitage holywoodien
+      }
       var tail = {x: snakeX, y: snakeY}; //créer une nouvelle tête à la place de l'ajouter
       score ++; //incrémente le score
       createFood(); //ajoute une nouvelle marine
