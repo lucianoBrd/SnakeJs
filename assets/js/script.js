@@ -70,6 +70,8 @@ window.onload = function () {
 //déclaration variables images
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
+  var imgTete = new Image();
+  imgTete.src='assets/img/tete.png';
 //end
 
 
@@ -288,12 +290,17 @@ function getRandomColor() {
   //end
 
 //fonction qui affiche le corps du serpent
-  var bodySnake = function(x, y, color, strokeColor) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = strokeColor;
-    ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-  }
+  var bodySnake = function(x, y, color, strokeColor, head) {
+    if(head==true){
+      ctx.drawImage(imgTete, x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+    }else{
+      ctx.fillStyle = color;
+      ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+      ctx.strokeStyle = strokeColor;
+      ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+    }
+    }
+    
 //
 
 //fonction qui affiche notre marine nationale
@@ -521,7 +528,12 @@ var changePos = function(i){
     snake.unshift(tail); //remet la tete a la premiere  case
 
     for(var i = 0; i < snake.length; i++) { // dessine entierement le serpent avec la bonne taille
-      bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke);
+      if(i===0){
+        bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke, true);
+      }else{
+        bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke,false);
+      }
+      
     }
 
 
