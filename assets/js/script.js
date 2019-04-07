@@ -224,12 +224,17 @@ window.onload = function () {
         fruit(food.x, food.y);
       }, 6000)
       gameColors = setInterval(function(){
-        canvasColorBack = 'gray';
-        canvasColorStroke = 'gray';
+        var tmpc = getRandomColor();
+        var tmps = tmpc;
+        while(tmpc == tmps){
+          tmps = getRandomColor();
+        }
+        canvasColorBack = tmpc;
+        canvasColorStroke = tmpc;
         wallsColor = 'white';
-        colorBodySnake = 'black';
-        colorSnakeStroke = 'black';
-      }, 10000);
+        colorBodySnake = tmps;
+        colorSnakeStroke = tmps;
+      }, 1000);
     }
   }
 //end
@@ -247,6 +252,17 @@ window.onload = function () {
     }
   }
 //end
+
+//fonction qui retourne une couleur aleatoire
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  //end
 
 //fonction qui affiche le corps du serpent
   var bodySnake = function(x, y, color, strokeColor) {
@@ -448,7 +464,7 @@ window.onload = function () {
     for(var i = 0; i < snake.length; i++) { // dessine entierement le serpent avec la bonne taille
       bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke);
     }
-    
+
 
     createWalls(wallsColor); //affiche les murs
     fruit(food.x, food.y); // affiche le fruit
