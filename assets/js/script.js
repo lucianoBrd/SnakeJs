@@ -167,18 +167,21 @@ window.onload = function () {
     start();
     loadNiv(1);
     nowNiv = 1;
+    colorSwitcher = "white";
   });
 
   document.getElementById("niv2").addEventListener("click", function(){
     start();
     loadNiv(2);
     nowNiv = 2;
+    colorSwitcher = "white";
   });
 
   document.getElementById("niv3").addEventListener("click", function(){
     start();
     loadNiv(3);
     nowNiv = 3;
+    colorSwitcher = "white";
   });
 
   document.getElementById("exit").addEventListener("click", function(){
