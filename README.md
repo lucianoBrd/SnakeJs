@@ -1,5 +1,6 @@
 # SnakeJs
 
+Crazy Snake pour des parties de folie.
 Jeu du snake fait en javascript, html et css :
 http://work.lucien-brd.com/
 
