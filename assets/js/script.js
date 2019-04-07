@@ -442,10 +442,11 @@ function getRandomColor() {
       sound(1); //activation musique de perte
       ctx.clearRect(0,0,canvasWidth,canvasHeight); //clean du canvas
       gameloop = clearInterval(gameloop); //stop la boucle de jeu
-      gameColors = clearInterval(gameColors);
+
       if(nowNiv===4){
         acceleration = clearInterval(acceleration);
         fruitChange = clearInterval(fruitChange);
+        gameColors = clearInterval(gameColors);
       }
       checkScore(score);
       printScore();
