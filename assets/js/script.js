@@ -260,10 +260,13 @@ window.onload = function () {
       ctx.fillStyle = color;
       ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
     }
-    for(var i = 0; i<switcher.length; i++){
-      ctx.fillStyle = colorSwitcher;
-      ctx.fillRect(switcher[i][0]*snakeSize, switcher[i][1]*snakeSize, snakeSize, snakeSize);
+    if(nowNiv == 4){
+      for(var i = 0; i<switcher.length; i++){
+        ctx.fillStyle = colorSwitcher;
+        ctx.fillRect(switcher[i][0]*snakeSize, switcher[i][1]*snakeSize, snakeSize, snakeSize);
+      }
     }
+    
   }
 //end
 
