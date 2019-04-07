@@ -243,7 +243,7 @@ window.onload = function () {
         canvasColorStroke = tmpc;
         wallsColor = 'white';
         colorBodySnake = tmps;
-        colorSnakeStroke = tmps;
+        colorSnakeStroke = tmpc;
       }, 1000);
     }
     game.play();
