@@ -26,6 +26,8 @@ window.onload = function () {
   var score = 0; //score
   var snakeSize = 20; //taille du snake
   var snake; //tab
+  var snakeX ;
+  var snakeY;
   var food; //tab pour les fruits
   var ctx; //contexte du canvas
   var canvasColorBack = 'black';
@@ -33,7 +35,7 @@ window.onload = function () {
   var wallsColor = 'red';
   var colorBodySnake = 'lightgray';
   var colorSnakeStroke = 'gray';
-  var colorSwitcher = "green";
+  var colorSwitcher = "black";
   var switcher = [];
 //end
 
@@ -365,9 +367,38 @@ function getRandomColor() {
         return true;
       }
     }
+    for(var i = 0; i< switcher.length; i++){ //teste avec les switcher
+      if(switcher[i][0] === x && switcher[i][1]=== y){
+        changePos(i);
+        return false;
+      }
+    }
 
     return false;
   }
+//end
+
+//fonction qui permet la teleportation du snake
+var changePos = function(i){
+  
+  if(i==0){
+    snakeX=switcher[1][0];
+    snakeY=switcher[1][1];
+    for(var i =0; i<snake.length; i++){
+      snake[i].x = switcher[1][0];
+      snake[i].y = switcher[1][1];
+    }
+  }
+  if(i==1){
+    snakeX=switcher[0][0];
+    snakeY=switcher[0][1];
+    for(var i =0; i<snake.length; i++){
+      snake[i].x = switcher[0][0];
+      snake[i].y = switcher[0][1];
+    }
+  }
+  
+}
 //end
 
 //fonction de capture des évènements clics
@@ -421,8 +452,8 @@ function getRandomColor() {
   //end
 
   //récuperation position serpent
-    var snakeX = snake[0].x;
-    var snakeY = snake[0].y;
+    snakeX = snake[0].x;
+    snakeY = snake[0].y;
   //end
 
   //gestion direction du serpent (avec methode onkeydown)
