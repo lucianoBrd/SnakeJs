@@ -58,9 +58,15 @@ window.onload = function () {
   var niv2; //score du niveau 2
   var niv3; //score du niveau 3
   var niv4; //score du niveau folie
+  var niv1N;//pour les nom best score du niveau 1
+  var niv2N; //nom best score du niveau 2
+  var niv3N; //nom best score du niveau 3
+  var niv4N; //nom best score du niveau folie
   var nowNiv;
   var delay;
   var walls = [];
+  var person;
+  var username;
 //end
 
 //déclaration variables images
@@ -85,25 +91,29 @@ window.onload = function () {
       case 1:
         if(score > niv1){
           niv1 = score;
+          niv1N = username;
         }
         break;
       case 2:
         if(score > niv2){
           niv2 = score;
+          niv2N = username;
         }
         break;
       case 3:
         if(score > niv3){
           niv3 = score;
+          niv3N = username;
         }
         break;
       case 4:
         if(score > niv4){
           niv4 = score;
+          niv4N = username;
         }
         break;
     }
-    fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3+'&4='+niv4); // si oui on lance le fichier php qui va modifier le fichier json
+    fetch('edit.php?1='+niv1+'&2='+niv2+'&3='+niv3+'&4='+niv4+'&1n='+niv1N+'&2n='+niv2N+'&3n='+niv3N+'&4n='+niv4N); // si oui on lance le fichier php qui va modifier le fichier json
     printScore();
   }
 
@@ -115,10 +125,14 @@ window.onload = function () {
             throw ("Error " + response.status);
         }
       }).then(function(data) {
-        niv1 = data.Niveau1;
-        niv2 = data.Niveau2;
-        niv3 = data.Niveau3;
-        niv4 = data.Niveau4;
+        niv1 = data.Niveau1[0];
+        niv1N = data.Niveau1[1];
+        niv2 = data.Niveau2[0];
+        niv2N = data.Niveau2[1];
+        niv3 = data.Niveau3[0];
+        niv3N = data.Niveau3[1];
+        niv4 = data.Niveau4[0];
+        niv4N = data.Niveau4[1];
         printScore();
 
       }).catch(function(err) {});
@@ -131,10 +145,10 @@ window.onload = function () {
     var niv3S = document.getElementById("niv3S");
     var niv4S = document.getElementById("niv4S");
 
-    niv1S.textContent = niv1;
-    niv2S.textContent = niv2;
-    niv3S.textContent = niv3;
-    niv4S.textContent = niv4;
+    niv1S.textContent = niv1N + " " + niv1;
+    niv2S.textContent = niv2N + " " + niv2;
+    niv3S.textContent = niv3N + " " + niv3;
+    niv4S.textContent = niv4N + " " + niv4;
   }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------end
@@ -170,6 +184,13 @@ window.onload = function () {
 
 //fonction qui active le canvas, affiche le plateau de jeu
   var start = function(){
+    person = prompt("Pour une meilleure expérience de jeu, mettre le son.\nEntrez votre nom de joueur :", "Nom Prenom");
+
+    if (person == null || person == "") {
+      username = "Soldat X";
+    } else {
+      username = person;
+    }
     canvas = document.createElement('canvas');
     canvas.setAttribute('width', canvasWidth);
     canvas.setAttribute('height', canvasHeight);
