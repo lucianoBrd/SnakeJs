@@ -190,6 +190,7 @@ window.onload = function () {
 
 //fonction qui active le canvas, affiche le plateau de jeu
   var start = function(){
+    // Comme alert mais on récupère le nom du joueur
     person = prompt("Pour une meilleure expérience de jeu, mettre le son.\nEntrez votre nom de joueur :", "Nom Prenom");
 
     if (person == null || person == "") {
@@ -333,7 +334,7 @@ window.onload = function () {
         ctx.fillRect(switcher[i][0]*snakeSize, switcher[i][1]*snakeSize, snakeSize, snakeSize);
       }
     }
-    
+
   }
 //end
 
@@ -359,7 +360,7 @@ function getRandomColor() {
       ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
     }
     }
-    
+
 //
 
 //fonction qui affiche notre marine nationale
@@ -450,7 +451,7 @@ function getRandomColor() {
 
 //fonction qui permet la teleportation du snake
 var changePos = function(i){
-  
+
   if(i==0){
     snakeX=switcher[1][0];
     snakeY=switcher[1][1];
@@ -467,7 +468,7 @@ var changePos = function(i){
       snake[i].y = switcher[0][1];
     }
   }
-  
+
 }
 //end
 
@@ -608,7 +609,7 @@ var changePos = function(i){
       }else{
         bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke,false);
       }
-      
+
     }
 
 
