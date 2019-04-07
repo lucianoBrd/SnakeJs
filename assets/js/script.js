@@ -248,6 +248,44 @@ window.onload = function () {
         colorSnakeStroke = tmpc;
       }, 1000);
     }
+    if(nowNiv === 1){
+      acceleration = setInterval(function(){
+        delay-=1;
+        gameloop = clearInterval(gameloop);
+        gameloop = setInterval(paint, delay);
+      }, 2000);
+
+      fruitChange = setInterval(function(){
+        createFood();
+        fruit(food.x, food.y);
+      }, 6000)
+    }
+    if (nowNiv === 2){
+      fruitChange = setInterval(function(){
+        createFood();
+        fruit(food.x, food.y);
+      }, 6000)
+    }
+
+    if(nowNiv===3){
+      acceleration = setInterval(function(){
+        delay-=1;
+        gameloop = clearInterval(gameloop);
+        gameloop = setInterval(paint, delay);
+      }, 2000);
+      gameColors = setInterval(function(){
+        var tmpc = getRandomColor();
+        var tmps = tmpc;
+        while(tmpc == tmps){
+          tmps = getRandomColor();
+        }
+        canvasColorBack = tmpc;
+        canvasColorStroke = tmpc;
+        wallsColor = 'white';
+        colorBodySnake = tmps;
+        colorSnakeStroke = tmpc;
+      }, 1000);
+    }
     game.play();
     gameloop = setInterval(paint, delay);
     game.addEventListener('ended', function() { //fonction de loop de la musique en cours
@@ -490,6 +528,22 @@ var changePos = function(i){
         fruitChange = clearInterval(fruitChange);
         gameColors = clearInterval(gameColors);
       }
+      if(nowNiv===3){
+        acceleration = clearInterval(acceleration);
+        
+        gameColors = clearInterval(gameColors);
+      }
+      if(nowNiv===2){
+        
+        fruitChange = clearInterval(fruitChange);
+        
+      }
+      if(nowNiv===1){
+        acceleration = clearInterval(acceleration);
+        fruitChange = clearInterval(fruitChange);
+        
+      }
+      
       checkScore(score);
       printScore();
       score = 0; //reinitialise le score
