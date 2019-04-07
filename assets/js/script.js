@@ -26,6 +26,8 @@ window.onload = function () {
   var score = 0; //score
   var snakeSize = 20; //taille du snake
   var snake; //tab
+  var snakeX ;
+  var snakeY;
   var food; //tab pour les fruits
   var ctx; //contexte du canvas
   var canvasColorBack = 'black';
@@ -33,6 +35,8 @@ window.onload = function () {
   var wallsColor = 'red';
   var colorBodySnake = 'lightgray';
   var colorSnakeStroke = 'gray';
+  var colorSwitcher = "black";
+  var switcher = [];
 //end
 
 //déclaration variables son
@@ -72,6 +76,8 @@ window.onload = function () {
 //déclaration variables images
   var img = new Image();   // Crée un nouvel élément Image
   img.src = 'assets/img/eat.png'; // Définit le chemin vers sa source
+  var imgTete = new Image();
+  imgTete.src='assets/img/tete.png';
 //end
 
 
@@ -215,6 +221,9 @@ window.onload = function () {
         niv = data;
         delay = niv.delay;
         walls = niv.walls;
+        if(nbNiv == 4){
+          switcher = niv.switcher;
+        }
         init();
 
     }).catch(function(err) {
@@ -280,6 +289,13 @@ window.onload = function () {
       ctx.fillStyle = color;
       ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
     }
+    if(nowNiv == 4){
+      for(var i = 0; i<switcher.length; i++){
+        ctx.fillStyle = colorSwitcher;
+        ctx.fillRect(switcher[i][0]*snakeSize, switcher[i][1]*snakeSize, snakeSize, snakeSize);
+      }
+    }
+    
   }
 //end
 
@@ -295,12 +311,17 @@ function getRandomColor() {
   //end
 
 //fonction qui affiche le corps du serpent
-  var bodySnake = function(x, y, color, strokeColor) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-    ctx.strokeStyle = strokeColor;
-    ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-  }
+  var bodySnake = function(x, y, color, strokeColor, head) {
+    if(head==true){
+      ctx.drawImage(imgTete, x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+    }else{
+      ctx.fillStyle = color;
+      ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+      ctx.strokeStyle = strokeColor;
+      ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+    }
+    }
+    
 //
 
 //fonction qui affiche notre marine nationale
@@ -378,9 +399,38 @@ function getRandomColor() {
         return true;
       }
     }
+    for(var i = 0; i< switcher.length; i++){ //teste avec les switcher
+      if(switcher[i][0] === x && switcher[i][1]=== y){
+        changePos(i);
+        return false;
+      }
+    }
 
     return false;
   }
+//end
+
+//fonction qui permet la teleportation du snake
+var changePos = function(i){
+  
+  if(i==0){
+    snakeX=switcher[1][0];
+    snakeY=switcher[1][1];
+    for(var i =0; i<snake.length; i++){
+      snake[i].x = switcher[1][0];
+      snake[i].y = switcher[1][1];
+    }
+  }
+  if(i==1){
+    snakeX=switcher[0][0];
+    snakeY=switcher[0][1];
+    for(var i =0; i<snake.length; i++){
+      snake[i].x = switcher[0][0];
+      snake[i].y = switcher[0][1];
+    }
+  }
+  
+}
 //end
 
 //fonction de capture des évènements clics
@@ -434,8 +484,8 @@ function getRandomColor() {
   //end
 
   //récuperation position serpent
-    var snakeX = snake[0].x;
-    var snakeY = snake[0].y;
+    snakeX = snake[0].x;
+    snakeY = snake[0].y;
   //end
 
   //gestion direction du serpent (avec methode onkeydown)
@@ -499,7 +549,12 @@ function getRandomColor() {
     snake.unshift(tail); //remet la tete a la premiere  case
 
     for(var i = 0; i < snake.length; i++) { // dessine entierement le serpent avec la bonne taille
-      bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke);
+      if(i===0){
+        bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke, true);
+      }else{
+        bodySnake(snake[i].x, snake[i].y, colorBodySnake, colorSnakeStroke,false);
+      }
+      
     }
 
 
