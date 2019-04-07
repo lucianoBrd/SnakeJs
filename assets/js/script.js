@@ -33,6 +33,8 @@ window.onload = function () {
   var wallsColor = 'red';
   var colorBodySnake = 'lightgray';
   var colorSnakeStroke = 'gray';
+  var colorSwitcher = "green";
+  var switcher = [];
 //end
 
 //déclaration variables son
@@ -197,6 +199,9 @@ window.onload = function () {
         niv = data;
         delay = niv.delay;
         walls = niv.walls;
+        if(nbNiv == 4){
+          switcher = niv.switcher;
+        }
         init();
 
     }).catch(function(err) {
@@ -244,6 +249,10 @@ window.onload = function () {
     for(var i = 0; i<walls.length; i++){
       ctx.fillStyle = color;
       ctx.fillRect(walls[i][0]*snakeSize, walls[i][1]*snakeSize, snakeSize, snakeSize);
+    }
+    for(var i = 0; i<switcher.length; i++){
+      ctx.fillStyle = colorSwitcher;
+      ctx.fillRect(switcher[i][0]*snakeSize, switcher[i][1]*snakeSize, snakeSize, snakeSize);
     }
   }
 //end
